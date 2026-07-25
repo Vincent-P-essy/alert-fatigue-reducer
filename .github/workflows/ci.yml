@@ -1,0 +1,69 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - run: pip install -e ".[dev]"
+      - run: ruff check src tests
+      - run: pytest -q
+
+  no-hidden-incidents:
+    # The claim is "reduces volume without hiding real alerts". CI checks the
+    # second half on every push, because the first half is easy and worthless
+    # on its own.
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -e .
+
+      - name: Reduction is real and nothing is suppressed
+        run: |
+          afr triage --demo --threshold 0.35 --json result.json
+          python - <<'PY'
+          import json
+          e = json.load(open("result.json"))["evaluation"]
+          assert e["volume_reduction"] > 0.80, f"reduction fell to {e['volume_reduction']:.0%}"
+          assert e["true_positives_suppressed"] == 0, (
+              f"{e['true_positives_suppressed']} true positive(s) are no longer visible"
+          )
+          assert e["budget_recall"] == 1.0, (
+              "a real incident fell outside a shift's triage budget"
+          )
+          print(
+              f"{e['volume_reduction']:.0%} reduction, "
+              f"{e['true_positives_visible']}/{e['true_positives']} true positives visible, "
+              f"all reachable in the top {e['triage_budget']}"
+          )
+          PY
+
+      - name: An unlabelled corpus is refused rather than flattered
+        run: |
+          printf '{"rule":"r","timestamp":"2026-07-20T12:00:00Z"}\n' > plain.ndjson
+          if afr evaluate plain.ndjson; then
+            echo "::error::evaluated an unlabelled corpus"
+            exit 1
+          fi
+          echo "correctly refused"
