@@ -1,0 +1,61 @@
+$ afr triage --demo
+╭─────────────────── afr triage ───────────────────╮
+│ 649 alerts  →  56 clusters   91.4% smaller queue │
+│ true positives visible  9/9   in the top 30: 9/9 │
+╰──────────────────────────────────────────────────╯
+                                       Ranked queue (top 15)                                        
+┏━━━━┳━━━━━━━┳━━━━━━━━━━┳━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃  # ┃ score ┃ sev      ┃  × ┃ what it is                       ┃ why it is here                   ┃
+┡━━━━╇━━━━━━━╇━━━━━━━━━━╇━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│  1 │    85 │ critical │  1 │ 4.2 GB archived to               │ critical severity (+40);         │
+│    │       │          │    │ C:\Windows\Temp\bk.7z by         │ critical asset (+25); rare rule, │
+│    │       │          │    │ m.dubois                         │ 0.2% of the queue (+20)          │
+│  2 │    81 │ high     │ 36 │ Privilege escalation attempt ×36 │ high severity (+25); rare rule,  │
+│    │       │          │    │ from 36 sources against 34       │ 5.7% of the queue (+20); 34      │
+│    │       │          │    │ targets over 1412 min            │ targets — looks like a sweep     │
+│    │       │          │    │                                  │ (+15)                            │
+│  3 │    73 │ medium   │ 20 │ PowerShell execution ×20 from 19 │ medium severity (+12); high      │
+│    │       │          │    │ sources against 19 targets over  │ asset (+15); rare rule, 5.5% of  │
+│    │       │          │    │ 1136 min                         │ the queue (+20)                  │
+│  4 │    70 │ high     │  1 │ m.dubois signed in from          │ high severity (+25); critical    │
+│    │       │          │    │ 203.0.113.77 (first seen from    │ asset (+25); rare rule, 0.2% of  │
+│    │       │          │    │ RO)                              │ the queue (+20)                  │
+│  5 │    70 │ high     │  1 │ m.dubois attempted to add        │ high severity (+25); critical    │
+│    │       │          │    │ themselves to Domain Admins      │ asset (+25); rare rule, 5.7% of  │
+│    │       │          │    │                                  │ the queue (+20)                  │
+│  6 │    68 │ medium   │ 36 │ Outbound connection to new       │ medium severity (+12); rare      │
+│    │       │          │    │ domain ×36 from 36 sources       │ rule, 5.5% of the queue (+20);   │
+│    │       │          │    │ against 35 targets over 1322 min │ 35 targets — looks like a sweep  │
+│    │       │          │    │                                  │ (+15)                            │
+│  7 │    61 │ low      │ 35 │ Suspicious DNS query ×35 from 35 │ low severity (+5); rare rule,    │
+│    │       │          │    │ sources against 35 targets over  │ 5.5% of the queue (+20); 35      │
+│    │       │          │    │ 1350 min                         │ targets — looks like a sweep     │
+│    │       │          │    │                                  │ (+15)                            │
+│  8 │    58 │ low      │  6 │ Failed authentication ×6 from    │ low severity (+5); critical      │
+│    │       │          │    │ 203.0.113.77 against vpn-gw-01   │ asset (+25); rare rule, 22.5% of │
+│    │       │          │    │ over 15 min                      │ the queue (+18)                  │
+│  9 │    50 │ medium   │  4 │ Unusual process parent ×4 from 4 │ medium severity (+12); rare      │
+│    │       │          │    │ sources against 4 targets over   │ rule, 5.5% of the queue (+20); 4 │
+│    │       │          │    │ 178 min                          │ targets — looks like a sweep     │
+│    │       │          │    │                                  │ (+6)                             │
+│ 10 │    47 │ medium   │  2 │ Unusual process parent ×2 from 2 │ medium severity (+12); high      │
+│    │       │          │    │ sources against 2 targets over   │ asset (+15); rare rule, 5.5% of  │
+│    │       │          │    │ 320 min                          │ the queue (+20)                  │
+│ 11 │    47 │ medium   │  1 │ Unusual process parent on        │ medium severity (+12); high      │
+│    │       │          │    │ wks-045                          │ asset (+15); rare rule, 5.5% of  │
+│    │       │          │    │                                  │ the queue (+20)                  │
+│ 12 │    47 │ medium   │  1 │ PowerShell execution on wks-190  │ medium severity (+12); high      │
+│    │       │          │    │                                  │ asset (+15); rare rule, 5.5% of  │
+│    │       │          │    │                                  │ the queue (+20)                  │
+│ 13 │    47 │ medium   │  1 │ PowerShell execution on wks-077  │ medium severity (+12); high      │
+│    │       │          │    │                                  │ asset (+15); rare rule, 5.5% of  │
+│    │       │          │    │                                  │ the queue (+20)                  │
+│ 14 │    47 │ medium   │  1 │ Unusual process parent on        │ medium severity (+12); high      │
+│    │       │          │    │ wks-032                          │ asset (+15); rare rule, 5.5% of  │
+│    │       │          │    │                                  │ the queue (+20)                  │
+│ 15 │    47 │ medium   │  1 │ Unusual process parent on        │ medium severity (+12); high      │
+│    │       │          │    │ wks-230                          │ asset (+15); rare rule, 5.5% of  │
+│    │       │          │    │                                  │ the queue (+20)                  │
+└────┴───────┴──────────┴────┴──────────────────────────────────┴──────────────────────────────────┘
+
+Exit: 0
