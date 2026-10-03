@@ -21,12 +21,6 @@ real incidents are still there.
 incident are in the top five.** The corpus is labelled and deterministic, so
 that figure can be re-derived rather than believed.
 
-## Execution preview
-
-![alert-fatigue-reducer execution](docs/screenshots/execution.png)
-
-Local execution of `afr triage --demo`. The input and output shown come from the repository example or test fixtures. [Verification](docs/verification.md).
-
 ## The measurement
 
 An alert is *visible* after clustering if it is the representative of its
